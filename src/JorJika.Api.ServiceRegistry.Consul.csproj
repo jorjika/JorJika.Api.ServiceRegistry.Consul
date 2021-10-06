@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net451</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>JorJika</Authors>
+    <Company>JorJika.Net</Company>
+    <Description>Register your api with Consul service registry. Use service discovery, key value store from consul and etc.
+
+Usage =&gt;
+
+In "Startup.cs" file
+In "ConfigureServices" Method add following line
+
+services.AddConsulClient(Configuration); 
+
+//Configuration is ICounfiguration object mapped to json config file where exists consul config section.
+
+In "Configure" Method add "IApplicationLifetime lifetime" as parameter and following line
+
+app.UseConsul(lifetime);
+
+Example Configuration section for consul (add in your appsettings.json or somwhere else):
+  "ConsulConfig": {
+    "Address": "http://127.0.0.1:8500",
+    "Token": "ConsulACLToken",
+    "ApiName": "YourServiceApi",
+    "Tags": [ "yourservicetag", "urlprefix-/yourservicetag strip=/yourservicetag" ]
+  }</Description>
+    <Copyright>Copyright © JorJika.net 2018</Copyright>
+    <PackageLicenseUrl>http://jorjika.net</PackageLicenseUrl>
+    <PackageProjectUrl>http://jorjika.net</PackageProjectUrl>
+    <PackageIconUrl>http://jorjika.net/j.png</PackageIconUrl>
+    <PackageReleaseNotes>v1.0.1 =&gt; Added possibility to configure HealthCheck custom url, Instance info url and add custom checks as needed.
+v1.0.2 =&gt; Added Keyword [BASE_URL] in HTTP property of object "AgentServiceCheck". Which will be replaced by binded ip address and port (used to discover local service).
+v1.0.3 =&gt; Added KV get possibility. Ex: ConsulManager.GetValueByKey("YourFolder/YourKey");
+v1.0.4 =&gt; Added KVSave. Added async methods;
+v1.0.5 =&gt; Configuration bug fixed;
+v1.0.6 =&gt; docker support added in IServerAddressFeature. Replacing "*" with loopback address.;
+v1.0.7 =&gt; multiple targets added
+v1.0.8 =&gt; Added Consul Configuration provider. Now its possible to add provider at Program.cs (IConfigurationBuilder.AddConsul). Changed auto discovery code. Replacing * with environment variable _ServerIpAddress if exists, if not then with loopback. Changed namespaces.
+</PackageReleaseNotes>
+    <Version>1.0.8</Version>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net451' ">
+    <PackageReference Include="Consul" Version="0.7.2.6" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Extensions.Configuration">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <Version>2.2.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+
+</Project>
